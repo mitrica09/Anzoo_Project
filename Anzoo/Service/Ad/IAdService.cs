@@ -1,4 +1,5 @@
 ﻿using Anzoo.ViewModels.Ad;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Anzoo.Service.Ad
 {
@@ -7,6 +8,10 @@ namespace Anzoo.Service.Ad
         Task<bool> Create(CreateAdViewModel adForm);
         Task<List<AdListViewModel>> GetAllAds();
         Task<AdDetailViewModel?> GetAdById(int id);
-
+        Task<IEnumerable<SelectListItem>> GetCategoriesForDropdownMenu();
+        Task<List<AdListViewModel>> GetMyAds();
+        Task<UpdateAdViewModel?> GetAdForEditAsync(int id, string userId);
+        Task<bool> UpdateAdAsync(UpdateAdViewModel model, string userId);
+        Task<bool> DeleteAdAsync(int id, string userId);
     }
 }

@@ -1,0 +1,35 @@
+﻿@import url("AllAds.css");
+
+/* container preț + butoane */
+.ad-price-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    min-width: 180px;
+    gap: 10px;
+}
+
+.ad-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+    .ad-actions .btn {
+        font-size: 0.8rem;
+        padding: 4px 12px;
+        min-width: 80px;
+    }
+
+@media (max-width: 768px) {
+    .ad-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ad-price-actions {
+        align-items: flex-start;
+        margin-top: 10px;
+    }
+}

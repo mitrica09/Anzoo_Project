@@ -17,10 +17,11 @@
                 <div class="ad-content">
                     <h3 class="ad-title">@ad.Title</h3>
                     <span class="ad-category-badge">@ad.Category</span><br />
+                    <span class="ad-location">Locație: @ad.Location</span><br />
                     <span class="ad-location">Publicat: @ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
                 </div>
                 <div class="ad-price">
-                    @ad.Price.ToString("0.##") €
+                    @ad.Price.ToString("0.##") Lei
                 </div>
             </div>
         </a>

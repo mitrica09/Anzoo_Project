@@ -23,11 +23,21 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <!-- Câmp Categorie -->
+    <!-- 🆕 Locație -->
     <div class="form-group">
-        <label asp-for="Category">Categorie</label>
-        <input asp-for="Category" class="form-control" />
-        <span asp-validation-for="Category" class="text-danger"></span>
+        <label asp-for="Location">Locație (oraș / județ)</label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <!-- Câmp Categorie -->
+    <!-- Categorie (Dropdown) -->
+    <div class="form-group">
+        <label asp-for="CategoryId">Categorie</label>
+        <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories">
+            <option value="">-- Selectează o categorie --</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
     <div class="form-group">

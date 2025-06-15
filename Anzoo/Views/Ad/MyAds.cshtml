@@ -1,0 +1,47 @@
+﻿@model List<Anzoo.ViewModels.Ad.AdListViewModel>
+
+@{
+    ViewData["Title"] = "Anunțurile mele";
+}
+
+<h2 class="list-title">Anunțurile mele</h2>
+
+<div class="ad-list">
+    @foreach (var ad in Model)
+    {
+        <div class="ad-row">
+            <div class="ad-thumbnail">
+                <img src="~/uploads/@(ad.MainImage ?? "default.jpg")" alt="Poză anunț" />
+            </div>
+
+            <div class="ad-content">
+                <h3 class="ad-title">@ad.Title</h3>
+                <span class="ad-category-badge">@ad.Category</span><br />
+                <span class="ad-location">Locație: @ad.Location</span><br />
+                <span class="ad-location">Publicat: @ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+            </div>
+
+            <div class="ad-price-actions">
+                <div class="ad-price">@ad.Price.ToString("0.##") Lei</div>
+                <div class="ad-actions">
+                    <a class="btn btn-outline-primary btn-sm"
+                       asp-controller="Ad" asp-action="Edit" asp-route-id="@ad.Id">
+                        ✏️ Editează
+                    </a>
+                    <form asp-controller="Ad" asp-action="Delete" method="post"
+                          onsubmit="return confirm('Ești sigur că vrei să ștergi anunțul?');"
+                          class="d-inline">
+                        <input type="hidden" name="id" value="@ad.Id" />
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            🗑️ Șterge
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Ad/MyAds.css" asp-append-version="true" />
+}

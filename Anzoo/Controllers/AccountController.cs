@@ -51,14 +51,24 @@ namespace Anzoo.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            var user = new User { FullName = vm.Name, Email = vm.Email, UserName = vm.Email };
+            var user = new User
+            {
+                FullName = vm.Name,
+                Email = vm.Email,
+                UserName = vm.Email,
+                Location = "N/A"
+            };
+
             var res = await _userManager.CreateAsync(user, vm.Password);
 
             if (res.Succeeded) return RedirectToAction(nameof(Login));
 
-            foreach (var e in res.Errors) ModelState.AddModelError(string.Empty, e.Description);
+            foreach (var e in res.Errors)
+                ModelState.AddModelError(string.Empty, e.Description);
+
             return View(vm);
         }
+
 
         /* ------------- FORGOT-PASSWORD ----------------- */
         [HttpGet, AllowAnonymous]

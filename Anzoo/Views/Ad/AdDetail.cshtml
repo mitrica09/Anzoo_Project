@@ -4,13 +4,11 @@
 }
 
 <div class="ad-detail-page container">
-
     <div class="ad-header">
         <h1>@Model.Title</h1>
     </div>
 
     <div class="ad-content-wrapper">
-        <!-- CAROUSEL -->
         <div class="ad-carousel">
             @if (Model.ImageFileNames?.Any() == true)
             {
@@ -35,12 +33,16 @@
             }
         </div>
 
-        <!-- DETALII -->
         <div class="ad-info-box">
-            <div class="ad-price">@Model.Price.ToString("0") €</div>
+            <div class="ad-price">@Model.Price.ToString("0") Lei</div>
 
             <div class="ad-category">
                 <span class="category-badge">@Model.Category</span>
+            </div>
+
+            <div class="ad-meta">
+                <span class="label">Locație:</span>
+                <span class="value">@Model.Location</span>
             </div>
 
             <div class="ad-meta">

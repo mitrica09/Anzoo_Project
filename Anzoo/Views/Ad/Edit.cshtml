@@ -1,0 +1,95 @@
+﻿@model Anzoo.ViewModels.Ad.UpdateAdViewModel
+@{
+    ViewData["Title"] = "Editare Anunț";
+}
+
+<h1>Editare Anunț</h1>
+
+<form asp-action="Edit" asp-controller="Ad" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <!---- TITLU ---->
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <!---- DESCRIERE ---->
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" rows="6" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <!---- LOCATIE ---->
+    <div class="form-group">
+        <label asp-for="Location">Locație (oraș / județ)</label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <!---- CATEGORIE (dropdown) ---->
+    <div class="form-group">
+        <label asp-for="CategoryId">Categorie</label>
+        <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control">
+            <option value="">-- Selectează o categorie --</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <!---- PREȚ ---->
+    <div class="form-group">
+        <label asp-for="Price">Preț (RON)</label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!---- IMAGINI ---->
+    <div class="form-group">
+        <label>Fotografii</label>
+        <p class="text-muted">Maxim 8 imagini. Prima imagine va fi considerată principală.</p>
+
+        <div id="image-container" class="image-container">
+            @* ► Imagini care EXISTĂ deja *@
+            @foreach (var img in Model.ExistingImages ?? new List<string>())
+            {
+                <div class="image-item existing" data-filename="@img">
+                    <img src="~/uploads/@img" alt="">
+                    <span class="main-badge">PRINCIPALĂ</span>
+                    <button type="button" class="remove-btn">&times;</button>
+
+                    <!--  Hidden pt. păstrarea ordinii  -->
+                    <input type="hidden" name="ExistingImages" value="@img" />
+                </div>
+            }
+
+            <!--  ► “+” pentru adăugare imagini noi  -->
+            <label id="uploadLabel" class="upload-label">
+                <div class="upload-icon">+</div>
+                <div class="upload-text">
+                    Adaugă imagini<br /><small>(max 8)</small>
+                </div>
+                <input asp-for="NewImages"
+                       id="imageInput"
+                       type="file"
+                       multiple
+                       accept="image/*"
+                       hidden />
+            </label>
+        </div>
+
+        <span asp-validation-for="NewImages" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvează modificările</button>
+</form>
+
+@section Styles {
+    <!-- Folosim același CSS de la Create  -->
+    <link rel="stylesheet" href="~/css/Ad/Create.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="~/js/Ad/Edit.js" asp-append-version="true"></script>
+}

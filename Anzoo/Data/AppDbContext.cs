@@ -10,6 +10,8 @@ namespace Anzoo.Data
 
         public DbSet<Ad> Ads { get; set; }
         public DbSet<AdImage> AdImages { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +34,29 @@ namespace Anzoo.Data
             modelBuilder.Entity<Ad>()
                 .Property(a => a.Price)
                 .HasPrecision(10, 2); // 10 cifre în total, 2 după virgulă
+
+            // Ad ↔ Category
+            modelBuilder.Entity<Ad>()
+            .HasOne(a => a.Category)
+            .WithMany(c => c.Ads)
+            .HasForeignKey(a => a.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);   // nu șterge anunțurile la ștergerea categoriei
+
+            modelBuilder.Entity<Category>().HasData(
+                new Category { Id = 1, Name = "Auto, moto și ambarcațiuni" },
+                new Category { Id = 2, Name = "Imobiliare" },
+                new Category { Id = 3, Name = "Locuri de muncă" },
+                new Category { Id = 4, Name = "Electronice și electrocasnice" },
+                new Category { Id = 5, Name = "Modă și frumusețe" },
+                new Category { Id = 6, Name = "Piese auto" },
+                new Category { Id = 7, Name = "Casă și grădină" },
+                new Category { Id = 8, Name = "Mama și copilul" },
+                new Category { Id = 9, Name = "Sport, timp liber, artă" },
+                new Category { Id = 10, Name = "Animale de companie" },
+                new Category { Id = 11, Name = "Agro și industrie" },
+                new Category { Id = 12, Name = "Servicii" },
+                new Category { Id = 13, Name = "Echipamente profesionale" }
+ );
         }
 
 
