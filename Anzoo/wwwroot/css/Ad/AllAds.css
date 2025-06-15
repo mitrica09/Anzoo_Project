@@ -1,0 +1,61 @@
+﻿.ad-row-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ad-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+    .ad-row:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+.ad-thumbnail img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.ad-content {
+    flex: 1;
+    padding: 0 20px;
+}
+
+.ad-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.ad-category-badge {
+    display: inline-block;
+    background-color: #e6f0ff;
+    color: #004085;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+}
+
+.ad-location {
+    font-size: 13px;
+    color: #777;
+}
+
+.ad-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1a1a1a;
+}

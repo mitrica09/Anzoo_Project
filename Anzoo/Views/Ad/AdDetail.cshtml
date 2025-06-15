@@ -1,0 +1,64 @@
+﻿@model Anzoo.ViewModels.Ad.AdDetailViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="ad-detail-page container">
+
+    <div class="ad-header">
+        <h1>@Model.Title</h1>
+    </div>
+
+    <div class="ad-content-wrapper">
+        <!-- CAROUSEL -->
+        <div class="ad-carousel">
+            @if (Model.ImageFileNames?.Any() == true)
+            {
+                <div id="adCarousel" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.ImageFileNames.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="~/uploads/@Model.ImageFileNames[i]" class="d-block w-100" alt="Imagine @(i + 1)">
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#adCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#adCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            }
+        </div>
+
+        <!-- DETALII -->
+        <div class="ad-info-box">
+            <div class="ad-price">@Model.Price.ToString("0") €</div>
+
+            <div class="ad-category">
+                <span class="category-badge">@Model.Category</span>
+            </div>
+
+            <div class="ad-meta">
+                <span class="label">Publicat la:</span>
+                <span class="value">@Model.CreatedAt.ToString("dd MMMM yyyy HH:mm")</span>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <div class="ad-description">
+                    <span class="label">Descriere:</span>
+                    <p>@Model.Description</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Ad/AdDetail.css" asp-append-version="true" />
+}

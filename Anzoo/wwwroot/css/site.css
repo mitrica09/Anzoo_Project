@@ -1,0 +1,88 @@
+/* ---- GENERAL ---- */
+body {
+    font-family: 'Poppins', sans-serif; !important
+    background-color: #f8f9fa; !important
+    color: #212529; !important
+}
+
+/* ---- NAVBAR ---- */
+.bg-teal {
+    background-color: #003b3b !important;
+}
+
+.navbar-brand {
+    color: #00ffd8 !important;
+    font-weight: 700;
+    font-size: 1.7rem;
+}
+
+/* Logo spacing (OLX-style) */
+.logo-spacing {
+    margin-left: 1.5rem;
+}
+
+/* Right-side menu spacing (OLX-style) */
+.navbar-nav {
+    gap: 0.75rem;
+    margin-right: 1.5rem;
+}
+
+    .navbar-nav .nav-link {
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: color 0.2s ease-in-out;
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: #00ffd8 !important;
+        }
+
+/* ---- AD BUTTON ---- */
+.btn-add {
+    background-color: #ffffff;
+    color: #003b3b;
+    border: 2px solid #00ffd8;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn-add:hover {
+        background-color: #00ffd8;
+        color: #003b3b;
+        border-color: #00ffd8;
+    }
+
+/* ---- FOOTER ---- */
+.footer {
+    background-color: #003b3b;
+    color: white;
+    font-size: 14px;
+}
+
+    .footer a {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+
+/* ---- PROFILE ---- */
+input.form-control:read-only {
+    background-color: #e9ecef;
+}
+
+/* ---- Responsive spacing ---- */
+@media (max-width: 991.98px) {
+    .navbar-nav .nav-link {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .navbar-nav {
+        margin-right: 0;
+        gap: 0;
+    }
+
+    .logo-spacing {
+        margin-left: 0.75rem;
+    }
+}

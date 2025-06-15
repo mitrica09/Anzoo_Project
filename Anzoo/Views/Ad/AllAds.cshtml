@@ -1,0 +1,32 @@
+﻿@model List<Anzoo.ViewModels.Ad.AdListViewModel>
+
+@{
+    ViewData["Title"] = "Toate anunțurile";
+}
+
+<h2 class="list-title">Toate anunțurile</h2>
+
+<div class="ad-list">
+    @foreach (var ad in Model)
+    {
+        <a href="@Url.Action("View", "Ad", new { id = ad.Id })" class="ad-row-link">
+            <div class="ad-row">
+                <div class="ad-thumbnail">
+                    <img src="~/uploads/@(ad.MainImage ?? "default.jpg")" alt="Poză anunț" />
+                </div>
+                <div class="ad-content">
+                    <h3 class="ad-title">@ad.Title</h3>
+                    <span class="ad-category-badge">@ad.Category</span><br />
+                    <span class="ad-location">Publicat: @ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                </div>
+                <div class="ad-price">
+                    @ad.Price.ToString("0.##") €
+                </div>
+            </div>
+        </a>
+    }
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Ad/AllAds.css" asp-append-version="true" />
+}
