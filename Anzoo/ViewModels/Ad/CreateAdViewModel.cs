@@ -16,6 +16,9 @@ namespace Anzoo.ViewModels.Ad
         [Required(ErrorMessage = "Locația este obligatorie"), MaxLength(100)]
         public string Location { get; set; }
 
+        [Phone]
+        public string? ContactPhone { get; set; }
+
         [Required]
         public int CategoryId { get; set; }
 

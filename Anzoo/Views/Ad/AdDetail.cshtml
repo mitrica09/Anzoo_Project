@@ -9,6 +9,7 @@
     </div>
 
     <div class="ad-content-wrapper">
+        <!-- CARUSEL IMAGINI -->
         <div class="ad-carousel">
             @if (Model.ImageFileNames?.Any() == true)
             {
@@ -33,6 +34,7 @@
             }
         </div>
 
+        <!-- BOX INFORMAŢII -->
         <div class="ad-info-box">
             <div class="ad-price">@Model.Price.ToString("0") Lei</div>
 
@@ -50,9 +52,18 @@
                 <span class="value">@Model.CreatedAt.ToString("dd MMMM yyyy HH:mm")</span>
             </div>
 
+            <!-- CONTACT -->
+            <hr />
+            <h5>Contact</h5>
+            <p class="mb-1"><strong>Email:</strong> <a href="mailto:@Model.ContactEmail">@Model.ContactEmail</a></p>
+            @if (!string.IsNullOrWhiteSpace(Model.ContactPhone))
+            {
+                <p><strong>Telefon:</strong> <a href="tel:@Model.ContactPhone">@Model.ContactPhone</a></p>
+            }
+
             @if (!string.IsNullOrWhiteSpace(Model.Description))
             {
-                <div class="ad-description">
+                <div class="ad-description mt-3">
                     <span class="label">Descriere:</span>
                     <p>@Model.Description</p>
                 </div>

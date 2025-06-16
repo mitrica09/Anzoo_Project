@@ -14,11 +14,9 @@ namespace Anzoo.Models
         [MaxLength(1000)]
         public string? Description { get; set; }
 
-        // 🆕 Locația anunțului (de unde se vinde)
         [Required, MaxLength(100)]
         public string Location { get; set; }
 
-        // Relație cu categoria
         [Required]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
@@ -27,13 +25,16 @@ namespace Anzoo.Models
 
         [Required]
         public decimal Price { get; set; }
+        [Required, EmailAddress]
+        public string ContactEmail { get; set; }
 
-        // Relație cu utilizatorul
+        [Phone]
+        public string? ContactPhone { get; set; }
+
         [Required]
         public string UserId { get; set; }
         public User User { get; set; }
 
-        // Imagini atașate
         public List<AdImage> Images { get; set; } = new();
     }
 }

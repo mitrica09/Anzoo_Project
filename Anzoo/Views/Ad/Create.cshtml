@@ -1,5 +1,4 @@
 ﻿@model Anzoo.ViewModels.Ad.CreateAdViewModel
-
 @{
     ViewData["Title"] = "Creare Anunț";
 }
@@ -9,29 +8,28 @@
 <form asp-controller="Ad" asp-action="Create" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
-    <!-- Câmp Titlu -->
+    <!-- TITLU -->
     <div class="form-group">
         <label asp-for="Title">Titlu</label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
-    <!-- Câmp Descriere -->
+    <!-- DESCRIERE -->
     <div class="form-group">
         <label asp-for="Description">Descriere</label>
         <textarea asp-for="Description" class="form-control" rows="4"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <!-- 🆕 Locație -->
+    <!-- LOCAŢIE -->
     <div class="form-group">
         <label asp-for="Location">Locație (oraș / județ)</label>
         <input asp-for="Location" class="form-control" />
         <span asp-validation-for="Location" class="text-danger"></span>
     </div>
 
-    <!-- Câmp Categorie -->
-    <!-- Categorie (Dropdown) -->
+    <!-- CATEGORIE -->
     <div class="form-group">
         <label asp-for="CategoryId">Categorie</label>
         <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories">
@@ -40,41 +38,42 @@
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
+    <!-- PREŢ -->
     <div class="form-group">
         <label asp-for="Price">Preț (RON)</label>
         <input asp-for="Price" class="form-control" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 
+    <!-- 🆕 TELEFON (opţional) -->
+    <div class="form-group">
+        <label asp-for="ContactPhone">Telefon (opțional)</label>
+        <input asp-for="ContactPhone" class="form-control" placeholder="07xxxxxxxx" />
+        <span asp-validation-for="ContactPhone" class="text-danger"></span>
+    </div>
 
-    <!-- Secțiunea de încărcare imagini -->
+    <!-- IMAGINI -->
     <div class="form-group">
         <label>Fotografii</label>
         <p class="text-muted">Puteți încărca maxim 8 imagini.</p>
-        <!-- Container pentru preview-uri și butonul de upload -->
+
         <div id="image-container" class="image-container">
-            <!-- Element label personalizat pentru upload (buton + drag&drop) -->
             <label id="uploadLabel" for="imageInput" class="upload-label">
                 <div class="upload-icon">+</div>
                 <div class="upload-text">Adaugă imagini<br><small>(max 8)</small></div>
             </label>
-            <!-- Previzualizările vor fi inserate aici de JavaScript, înaintea label-ului de upload -->
         </div>
-        <!-- Input-ul de fișiere (ascuns, folosit de label-ul de mai sus) -->
-        <input asp-for="Images" id="imageInput" type="file" multiple accept="image/*" style="display:none;" />
+
+        <input asp-for="Images" id="imageInput" type="file" multiple accept="image/*" hidden />
     </div>
 
-    <!-- Buton de submit -->
     <button type="submit" class="btn btn-primary">Publică Anunțul</button>
 </form>
 
 @section Styles {
-    <!-- Referință către fișierul CSS specific paginii Create -->
     <link rel="stylesheet" href="~/css/Ad/Create.css" asp-append-version="true" />
 }
 @section Scripts {
-    <!-- Biblioteca SortableJS pentru drag-and-drop (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <!-- Referință către fișierul JS specific paginii Create -->
     <script src="~/js/Ad/Create.js" asp-append-version="true"></script>
 }

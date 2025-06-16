@@ -24,7 +24,7 @@ namespace Anzoo.ViewModels.Ad
 
         [Required]
         public decimal Price { get; set; }
-
+        public string? ContactPhone { get; set; }
         public List<IFormFile>? NewImages { get; set; }
         public List<string>? ExistingImages { get; set; }
         public List<string>? ImagesToDelete { get; set; }

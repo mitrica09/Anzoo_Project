@@ -26,10 +26,10 @@ namespace Anzoo.Repository.Ad
             try
             {
                 var userId = _http.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
-                // caută categoria în baza de date
                 var category = await _db.Categories.FindAsync(adForm.CategoryId);
-                if (category == null)
+                if (category == null || user == null)
                     return false;
 
                 var ad = new Models.Ad
@@ -40,13 +40,14 @@ namespace Anzoo.Repository.Ad
                     Category = category,
                     UserId = userId,
                     CreatedAt = DateTime.Now,
-                    Price = adForm.Price
+                    Price = adForm.Price,
+                    ContactEmail = user.Email,
+                    ContactPhone = adForm.ContactPhone
                 };
 
                 _db.Ads.Add(ad);
                 await _db.SaveChangesAsync();
 
-                // salvează imaginile
                 if (adForm.Images != null && adForm.Images.Count > 0)
                 {
                     foreach (var file in adForm.Images)
@@ -78,6 +79,32 @@ namespace Anzoo.Repository.Ad
             }
         }
 
+        public async Task<AdDetailViewModel?> GetAdById(int id)
+        {
+            return await _db.Ads
+                .Include(a => a.Images)
+                .Include(a => a.Category)
+                .Where(a => a.Id == id)
+                .Select(a => new AdDetailViewModel
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    Location = a.Location,
+                    Category = a.Category.Name,
+                    CreatedAt = a.CreatedAt,
+                    Price = a.Price,
+                    ContactEmail = a.ContactEmail,
+                    ContactPhone = a.ContactPhone,
+                    ImageFileNames = a.Images
+                        .OrderBy(i => i.OrderIndex)
+                        .Select(i => i.FileName)
+                        .ToList()
+                })
+                .FirstOrDefaultAsync();
+        }
+
+
         public async Task<List<AdListViewModel>> GetAllAds()
         {
             var ads = await _db.Ads
@@ -98,25 +125,6 @@ namespace Anzoo.Repository.Ad
             }).ToList();
         }
 
-        public async Task<AdDetailViewModel?> GetAdById(int id)
-        {
-            return await _db.Ads
-                .Include(a => a.Images)
-                .Include(a => a.Category)
-                .Where(a => a.Id == id)
-                .Select(a => new AdDetailViewModel
-                {
-                    Id = a.Id,
-                    Title = a.Title,
-                    Description = a.Description,
-                    Location = a.Location,
-                    Category = a.Category.Name,
-                    CreatedAt = a.CreatedAt,
-                    Price = a.Price,
-                    ImageFileNames = a.Images.Select(i => i.FileName).ToList()
-                })
-                .FirstOrDefaultAsync();
-        }
         public async Task<IEnumerable<SelectListItem>> GetCategoriesForDropdownMenu()
         {
             return await _db.Categories
@@ -127,6 +135,7 @@ namespace Anzoo.Repository.Ad
                 })
                 .ToListAsync();
         }
+
         public async Task<List<AdListViewModel>> GetMyAds(string userId)
         {
             var ads = await _db.Ads
@@ -147,6 +156,7 @@ namespace Anzoo.Repository.Ad
                 MainImage = a.Images.FirstOrDefault(i => i.IsMain)?.FileName
             }).ToList();
         }
+
         public async Task<UpdateAdViewModel?> GetAdForEditAsync(int id, string userId)
         {
             var ad = await _db.Ads
@@ -155,13 +165,12 @@ namespace Anzoo.Repository.Ad
 
             if (ad == null) return null;
 
-            // Obține categoriile din DB
             var categories = await _db.Categories
                 .Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.Name,
-                    Selected = c.Id == ad.CategoryId // ✅ marchează categoria actuală ca selectată
+                    Selected = c.Id == ad.CategoryId
                 })
                 .ToListAsync();
 
@@ -184,67 +193,79 @@ namespace Anzoo.Repository.Ad
                 .Include(a => a.Images)
                 .FirstOrDefaultAsync(a => a.Id == model.Id && a.UserId == userId);
 
-            if (ad == null)
-                return false;
+            if (ad == null) return false;
 
-            // 1. Actualizează câmpuri de bază
             ad.Title = model.Title;
             ad.Description = model.Description;
             ad.Location = model.Location;
             ad.Price = model.Price;
             ad.CategoryId = model.CategoryId;
+            ad.ContactPhone = model.ContactPhone;
 
-            // 2. Șterge imaginile marcate pentru ștergere
-            if (model.ImagesToDelete != null)
+            /* 1. Ștergere imagini selectate */
+            if (model.ImagesToDelete?.Any() == true)
             {
-                var toDelete = ad.Images
-                    .Where(i => model.ImagesToDelete.Contains(i.FileName))
-                    .ToList();
-
-                foreach (var img in toDelete)
+                foreach (var img in ad.Images
+                                      .Where(i => model.ImagesToDelete.Contains(i.FileName))
+                                      .ToList())
                 {
                     var path = Path.Combine("wwwroot", "uploads", img.FileName);
-                    if (File.Exists(path))
-                        File.Delete(path);
-
+                    if (File.Exists(path)) File.Delete(path);
                     ad.Images.Remove(img);
                 }
             }
 
-            // 3. Adaugă imagini noi
-            if (model.NewImages != null && model.NewImages.Any())
+            /* 2. Adăugare imagini noi */
+            if (model.NewImages?.Any() == true)
             {
-                var uploadPath = Path.Combine("wwwroot", "uploads");
+                var uploadDir = Path.Combine("wwwroot", "uploads");
+                Directory.CreateDirectory(uploadDir);
 
-                foreach (var img in model.NewImages)
+                foreach (var file in model.NewImages.Where(f => f.Length > 0))
                 {
-                    if (img.Length > 0)
+                    var unique = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                    var dest = Path.Combine(uploadDir, unique);
+
+                    await using var fs = new FileStream(dest, FileMode.Create);
+                    await file.CopyToAsync(fs);
+
+                    ad.Images.Add(new AdImage
                     {
-                        var uniqueName = Guid.NewGuid() + Path.GetExtension(img.FileName);
-                        var filePath = Path.Combine(uploadPath, uniqueName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await img.CopyToAsync(stream);
-                        }
-
-                        ad.Images.Add(new AdImage
-                        {
-                            FileName = uniqueName,
-                            IsMain = false
-                        });
-                    }
+                        FileName = unique,
+                        IsMain = false,
+                        OrderIndex = 9999 // temporar
+                    });
                 }
             }
 
-            // 4. Setează imaginea principală
-            if (!string.IsNullOrEmpty(model.MainImage))
+            /* 3. Actualizare ordine și poză principală */
+            var finalOrder = new List<string>();
+
+            if (model.ExistingImages?.Any() == true)
+                finalOrder.AddRange(model.ExistingImages);
+
+            if (model.NewImages?.Any() == true)
             {
-                foreach (var img in ad.Images)
+                var newFileNames = ad.Images
+                    .Where(x => x.OrderIndex == 9999)
+                    .Select(x => x.FileName)
+                    .ToList();
+
+                finalOrder.AddRange(newFileNames);
+            }
+
+            for (int i = 0; i < finalOrder.Count; i++)
+            {
+                var img = ad.Images.FirstOrDefault(x => x.FileName == finalOrder[i]);
+                if (img != null)
                 {
+                    img.OrderIndex = i;
                     img.IsMain = img.FileName == model.MainImage;
                 }
             }
+
+            if (ad.Images.Any() && ad.Images.All(x => !x.IsMain))
+                ad.Images.OrderBy(x => x.OrderIndex).First().IsMain = true;
 
             await _db.SaveChangesAsync();
             return true;
@@ -260,6 +281,5 @@ namespace Anzoo.Repository.Ad
             await _db.SaveChangesAsync();
             return true;
         }
-
     }
 }

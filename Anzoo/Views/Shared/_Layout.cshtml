@@ -39,7 +39,11 @@
                         <!-- decalaj față de marginea dreaptă -->
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li><a asp-controller="Ad" asp-action="MyAds">Anunțurile mele</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link ms-lg-3" asp-controller="Ad" asp-action="MyAds">
+                                    Anunțurile mele
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Profile">
                                     Profilul meu

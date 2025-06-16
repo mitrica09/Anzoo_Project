@@ -2,6 +2,7 @@
 const imageContainer = document.getElementById('image-container');
 const uploadLabel = document.getElementById('uploadLabel');
 const inputFile = document.getElementById('imageInput');
+const mainImageInput = document.getElementById('mainImageInput');
 
 let dataTransfer = new DataTransfer();           // fișiere NOI
 
@@ -9,9 +10,17 @@ let dataTransfer = new DataTransfer();           // fișiere NOI
 function refreshMainBadge() {
     imageContainer.querySelectorAll('.image-item')
         .forEach(el => el.classList.remove('main'));
+
     const first = imageContainer.querySelector('.image-item');
-    if (first) first.classList.add('main');
+    if (first) {
+        first.classList.add('main');
+        const mainFile = first.dataset.filename;
+        if (mainImageInput) {
+            mainImageInput.value = mainFile;
+        }
+    }
 }
+
 function updateAddBtn() {
     const count = imageContainer.querySelectorAll('.image-item').length;
     uploadLabel.style.display = (count >= 8 ? 'none' : 'flex');
@@ -25,14 +34,12 @@ imageContainer.addEventListener('click', e => {
     const fileName = item.dataset.filename;
 
     if (item.classList.contains('existing')) {
-        // ► notăm pt. ștergere
         const inp = document.createElement('input');
         inp.type = 'hidden';
         inp.name = 'ImagesToDelete';
         inp.value = fileName;
         imageContainer.appendChild(inp);
     } else {
-        // ► era o imagine nouă → o scoatem din DataTransfer
         const idx = Array.from(
             imageContainer.querySelectorAll('.image-item')
         ).filter(el => !el.classList.contains('existing'))
@@ -58,13 +65,14 @@ inputFile.addEventListener('change', () => {
         dataTransfer.items.add(file);
 
         const div = document.createElement('div');
-        div.className = 'image-item';   // nu are .existing
+        div.className = 'image-item';
         div.file = file;
 
         const img = document.createElement('img');
         div.appendChild(img);
-        new FileReader().onload = e => img.src = e.target.result;
-        new FileReader().readAsDataURL?.(file);
+        const reader = new FileReader();
+        reader.onload = e => img.src = e.target.result;
+        reader.readAsDataURL(file);
 
         const badge = document.createElement('span');
         badge.className = 'main-badge';
@@ -91,17 +99,22 @@ new Sortable(imageContainer, {
     draggable: '.image-item',
     filter: '.upload-label',
     onEnd: () => {
-        // ► reconstruim input-urile ExistingImages în noua ordine
-        imageContainer.querySelectorAll('input[name="ExistingImages"]').forEach(i => i.remove());
+        // 1. Elimină inputurile vechi
+        document.querySelectorAll('input[name="ExistingImages"]').forEach(i => i.remove());
 
-        imageContainer.querySelectorAll('.image-item.existing')
-            .forEach(div => {
-                const inp = document.createElement('input');
-                inp.type = 'hidden';
-                inp.name = 'ExistingImages';
-                inp.value = div.dataset.filename;
-                imageContainer.appendChild(inp);
-            });
+        // 2. Creează inputuri noi în ORDINEA ACTUALĂ
+        const allImageItems = imageContainer.querySelectorAll('.image-item');
+
+        allImageItems.forEach(div => {
+            const filename = div.dataset.filename;
+            if (!filename) return;
+
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'ExistingImages';
+            hidden.value = filename;
+            imageContainer.appendChild(hidden);
+        });
 
         refreshMainBadge();
     }

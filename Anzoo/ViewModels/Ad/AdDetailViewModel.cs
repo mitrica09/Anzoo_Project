@@ -9,6 +9,8 @@ namespace Anzoo.ViewModels.Ad
         public string? Description { get; set; }
         [Required, MaxLength(100)]
         public string Location { get; set; }
+        public string ContactEmail { get; set; }
+        public string? ContactPhone { get; set; }
         public string Category { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<string> ImageFileNames { get; set; }

@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string FileName { get; set; }
         public bool IsMain { get; set; } = false;
+        public int OrderIndex { get; set; }
         public int AdId { get; set; }
         public Ad Ad { get; set; }
     }
