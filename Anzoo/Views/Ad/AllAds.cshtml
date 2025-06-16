@@ -1,11 +1,31 @@
 ﻿@model List<Anzoo.ViewModels.Ad.AdListViewModel>
+@using Anzoo.ViewModels.Ad
 
 @{
     ViewData["Title"] = "Toate anunțurile";
+    var filter = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
 }
 
-<h2 class="list-title">Toate anunțurile</h2>
+<!-- FORMULAR DE FILTRARE -->
+<div class="search-container">
+    <form method="get" class="search-bar">
+        <div>
+            <i class="bi bi-search"></i>
+            <input type="text" name="Keyword" placeholder="Ce anume cauți?" value="@filter.GetValueOrDefault("Keyword")" />
+        </div>
+        <div>
+            <i class="bi bi-geo-alt-fill"></i>
+            <input type="text" name="Location" placeholder="Toată țara" value="@filter.GetValueOrDefault("Location")" />
+        </div>
+        <button type="submit" class="search-btn">
+            Căutare <i class="bi bi-search"></i>
+        </button>
+    </form>
+</div>
 
+
+
+<!-- LISTA DE ANUNȚURI -->
 <div class="ad-list">
     @foreach (var ad in Model)
     {
@@ -17,8 +37,14 @@
                 <div class="ad-content">
                     <h3 class="ad-title">@ad.Title</h3>
                     <span class="ad-category-badge">@ad.Category</span><br />
-                    <span class="ad-location">Locație: @ad.Location</span><br />
-                    <span class="ad-location">Publicat: @ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                    <div class="ad-meta">
+                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                        <span>@ad.Location</span>
+                    </div>
+                    <div class="ad-meta">
+                        <i class="bi bi-calendar-event-fill text-primary me-1"></i>
+                        <span>@ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                    </div>
                 </div>
                 <div class="ad-price">
                     @ad.Price.ToString("0.##") Lei
@@ -29,5 +55,6 @@
 </div>
 
 @section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/Ad/AllAds.css" asp-append-version="true" />
 }

@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace Anzoo.Controllers
 {
-    [Authorize]                               // - doar utilizatori logaţi
+    [Authorize]
     public class AdController : Controller
     {
         private readonly IAdService _service;
@@ -51,16 +51,6 @@ namespace Anzoo.Controllers
 
             TempData["Msg"] = "Anunțul a fost publicat!";
             return RedirectToAction("MyAds");
-        }
-
-
-
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> AllAds()
-        {
-            var ads = await _service.GetAllAds();
-            return View(ads);
         }
 
         [HttpGet("/Ad/View/{id}")]
@@ -135,6 +125,15 @@ namespace Anzoo.Controllers
 
             TempData["Msg"] = "Anunțul a fost șters.";
             return RedirectToAction("MyAds");
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> AllAds([FromQuery] AdFilterViewModel filter)
+        {
+            ViewBag.Categories = await _service.GetCategoriesForDropdownMenu();
+            var ads = await _service.GetAllAdsFilteredAsync(filter);
+            return View(ads);
         }
 
     }

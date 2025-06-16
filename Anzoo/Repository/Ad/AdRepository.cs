@@ -182,6 +182,7 @@ namespace Anzoo.Repository.Ad
                 Location = ad.Location,
                 CategoryId = ad.CategoryId,
                 Price = ad.Price,
+                ContactPhone = ad.ContactPhone,
                 ExistingImages = ad.Images.Select(i => i.FileName).ToList(),
                 Categories = categories
             };
@@ -281,5 +282,70 @@ namespace Anzoo.Repository.Ad
             await _db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<AdListViewModel>> GetAllAdsFilteredAsync(AdFilterViewModel filter)
+        {
+            var query = _db.Ads
+                .Include(a => a.Images)
+                .Include(a => a.Category)
+                .AsQueryable();
+
+            // 🔍 Filtrare după titlu (cuvânt cheie în titlu sau descriere)
+            if (!string.IsNullOrWhiteSpace(filter.Keyword))
+            {
+                var keyword = filter.Keyword.Trim().ToLower();
+                query = query.Where(a =>
+                    a.Title.ToLower().Contains(keyword) ||
+                    (a.Description != null && a.Description.ToLower().Contains(keyword)));
+            }
+
+            // 🧭 Filtrare după categorie
+            if (filter.CategoryId.HasValue && filter.CategoryId.Value > 0)
+            {
+                query = query.Where(a => a.CategoryId == filter.CategoryId.Value);
+            }
+
+            // 📍 Locație
+            if (!string.IsNullOrWhiteSpace(filter.Location))
+            {
+                var location = filter.Location.Trim().ToLower();
+                query = query.Where(a => a.Location.ToLower().Contains(location));
+            }
+
+            // 💰 Preț minim
+            if (filter.MinPrice.HasValue)
+            {
+                query = query.Where(a => a.Price >= filter.MinPrice.Value);
+            }
+
+            // 💰 Preț maxim
+            if (filter.MaxPrice.HasValue)
+            {
+                query = query.Where(a => a.Price <= filter.MaxPrice.Value);
+            }
+
+            // 🔀 Sortare
+            query = filter.SortBy switch
+            {
+                "price_asc" => query.OrderBy(a => a.Price),
+                "price_desc" => query.OrderByDescending(a => a.Price),
+                "date_asc" => query.OrderBy(a => a.CreatedAt),
+                _ => query.OrderByDescending(a => a.CreatedAt)
+            };
+
+            var result = await query.ToListAsync();
+
+            return result.Select(a => new AdListViewModel
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Category = a.Category.Name,
+                Location = a.Location,
+                CreatedAt = a.CreatedAt,
+                Price = a.Price,
+                MainImage = a.Images.FirstOrDefault(i => i.IsMain)?.FileName
+            }).ToList();
+        }
+
     }
 }

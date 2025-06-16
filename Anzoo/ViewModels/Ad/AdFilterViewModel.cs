@@ -1,0 +1,16 @@
+﻿namespace Anzoo.ViewModels.Ad
+{
+    public class AdFilterViewModel
+    {
+        public int? CategoryId { get; set; }
+
+        public string? Location { get; set; }
+
+        public decimal? MinPrice { get; set; }
+
+        public decimal? MaxPrice { get; set; }
+
+        public string? SortBy { get; set; }
+        public string? Keyword { get; set; }
+    }
+}

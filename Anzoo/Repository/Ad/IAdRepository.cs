@@ -13,5 +13,6 @@ namespace Anzoo.Repository.Ad
         Task<UpdateAdViewModel?> GetAdForEditAsync(int id, string userId);
         Task<bool> UpdateAsync(UpdateAdViewModel model, string userId);
         Task<bool> DeleteAsync(int id, string userId);
+        Task<List<AdListViewModel>> GetAllAdsFilteredAsync(AdFilterViewModel filter);
     }
 }
