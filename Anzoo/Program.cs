@@ -1,8 +1,10 @@
 using Anzoo.Data;
 using Anzoo.Models;
 using Anzoo.Repository.Ad;
+using Anzoo.Repository.Favorite;
 using Anzoo.Repository.SendGrid;
 using Anzoo.Service.Ad;
+using Anzoo.Service.Favorite;
 using Anzoo.Service.SendGrid;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +35,8 @@ builder.Services.AddScoped<ISendGridRepository, SendGridRepository>();
 builder.Services.AddScoped<ISendGridService, SendGridService>();
 builder.Services.AddScoped<IAdRepository, AdRepository>();
 builder.Services.AddScoped<IAdService, AdService>();
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 
 var app = builder.Build();

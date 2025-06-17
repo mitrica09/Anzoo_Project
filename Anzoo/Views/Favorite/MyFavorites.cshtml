@@ -1,0 +1,49 @@
+﻿@model List<Anzoo.ViewModels.Ad.AdListViewModel>
+@{
+    ViewData["Title"] = "Anunțuri Favorite";
+}
+
+<h2 class="list-title">Anunțuri Favorite</h2>
+
+<div class="ad-list">
+    @if (!Model.Any())
+    {
+        <div style="padding: 20px; text-align: center; color: #777;">
+            Nu ai anunțuri favorite momentan.
+        </div>
+    }
+    else
+    {
+        foreach (var ad in Model)
+        {
+            <a href="@Url.Action("View", "Ad", new { id = ad.Id })" class="ad-row-link">
+                <div class="ad-row">
+                    <div class="ad-thumbnail">
+                        <img src="~/uploads/@(ad.MainImage ?? "default.jpg")" alt="Poză anunț" />
+                    </div>
+                    <div class="ad-content">
+                        <h3 class="ad-title">@ad.Title</h3>
+                        <span class="ad-category-badge">@ad.Category</span><br />
+                        <div class="ad-meta">
+                            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                            <span>@ad.Location</span>
+                        </div>
+                        <div class="ad-meta">
+                            <i class="bi bi-calendar-event-fill text-primary me-1"></i>
+                            <span>@ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                        </div>
+                    </div>
+                    <div class="ad-price">
+                        @ad.Price.ToString("0.##") Lei
+                    </div>
+                </div>
+            </a>
+        }
+    }
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/Favorite/MyFavorites.css" asp-append-version="true" />
+}
+

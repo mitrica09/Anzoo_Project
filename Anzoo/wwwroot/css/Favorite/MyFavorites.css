@@ -1,0 +1,125 @@
+﻿.ad-row-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ad-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #fff;
+    margin-bottom: 24px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+    .ad-row:hover {
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    }
+
+.ad-thumbnail img {
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.ad-content {
+    flex: 1;
+    padding: 0 24px;
+    min-width: 0;
+}
+
+.ad-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    color: #222;
+}
+
+.ad-category-badge {
+    display: inline-block;
+    background-color: #e6f0ff;
+    color: #004085;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.ad-meta {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+    .ad-meta i {
+        font-size: 16px;
+        margin-right: 5px;
+    }
+
+.ad-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    white-space: nowrap;
+}
+
+.ad-list {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ad-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .ad-thumbnail img {
+        width: 100%;
+        height: auto;
+    }
+
+    .ad-content {
+        width: 100%;
+        padding: 0;
+    }
+
+    .ad-title {
+        font-size: 18px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .ad-category-badge {
+        margin-bottom: 4px;
+        font-size: 13px;
+    }
+
+    .ad-meta {
+        font-size: 13px;
+    }
+
+    .ad-price {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 6px;
+    }
+}

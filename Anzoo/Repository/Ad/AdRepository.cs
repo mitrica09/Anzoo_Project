@@ -285,6 +285,8 @@ namespace Anzoo.Repository.Ad
 
         public async Task<List<AdListViewModel>> GetAllAdsFilteredAsync(AdFilterViewModel filter)
         {
+            var userId = _http.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var query = _db.Ads
                 .Include(a => a.Images)
                 .Include(a => a.Category)
@@ -333,9 +335,20 @@ namespace Anzoo.Repository.Ad
                 _ => query.OrderByDescending(a => a.CreatedAt)
             };
 
-            var result = await query.ToListAsync();
+            var ads = await query.ToListAsync();
 
-            return result.Select(a => new AdListViewModel
+            // ✅ Optimizare: preluăm toate id-urile favorite pentru userul logat
+            var favoriteAdIds = new HashSet<int>();
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                favoriteAdIds = _db.Favorites
+                    .Where(f => f.UserId == userId)
+                    .Select(f => f.AdId)
+                    .ToHashSet();
+            }
+
+            return ads.Select(a => new AdListViewModel
             {
                 Id = a.Id,
                 Title = a.Title,
@@ -343,7 +356,8 @@ namespace Anzoo.Repository.Ad
                 Location = a.Location,
                 CreatedAt = a.CreatedAt,
                 Price = a.Price,
-                MainImage = a.Images.FirstOrDefault(i => i.IsMain)?.FileName
+                MainImage = a.Images.FirstOrDefault(i => i.IsMain)?.FileName,
+                IsFavorite = favoriteAdIds.Contains(a.Id)
             }).ToList();
         }
 

@@ -11,6 +11,8 @@ namespace Anzoo.Data
         public DbSet<Ad> Ads { get; set; }
         public DbSet<AdImage> AdImages { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,7 +58,19 @@ namespace Anzoo.Data
                 new Category { Id = 11, Name = "Agro și industrie" },
                 new Category { Id = 12, Name = "Servicii" },
                 new Category { Id = 13, Name = "Echipamente profesionale" }
- );
+                );
+
+            modelBuilder.Entity<Favorite>()
+                .HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Favorite>()
+                .HasOne(f => f.Ad)
+                .WithMany()
+                .HasForeignKey(f => f.AdId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
 

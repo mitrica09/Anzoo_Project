@@ -19,7 +19,6 @@
         text-overflow: ellipsis;
     }
 
-
 .ad-content-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -49,19 +48,22 @@
     border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.ad-price {
+.ad-price-wrapper {
     font-size: 1.6rem;
     font-weight: bold;
     color: #000;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
 }
 
 .price-value {
-    margin-left: 5px;
+    font-size: 1.6rem;
 }
 
 .category-badge {
@@ -120,6 +122,17 @@
         text-decoration: underline;
     }
 
+.btn-outline-danger {
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    transition: all 0.2s ease;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
 /* DESCRIERE FINALĂ COMPACTĂ */
 .ad-description-section {
     display: flex;
@@ -145,11 +158,6 @@
     line-height: 1.2;
 }
 
-.ad-header h1 {
-    font-size: 1.5rem;
-    text-align: center;
-}
-
 .desc-text {
     margin: 0;
     line-height: 1.4;
@@ -157,6 +165,7 @@
     word-break: break-word;
 }
 
+/* Responsive */
 @media (max-width: 480px) {
     .ad-detail-page {
         padding: 20px 12px;
@@ -194,5 +203,10 @@
     .phone-badge {
         font-size: 0.8rem;
         padding: 4px 8px;
+    }
+
+    .btn-outline-danger {
+        font-size: 0.85rem;
+        padding: 8px 10px;
     }
 }

@@ -1,0 +1,34 @@
+1.
+Verificare identitate / documente
+Pentru închirieri serioase:
+💳 Upload CI/Contract (doar admin vede)
+✅ Marcaj „Proprietar verificat”
+
+
+2.
+Favoritarea anunțurilor
+Poți păstra, ca până acum, ❤️ favorite
+Pagina „Anunțuri salvate”
+Sincronizat pe cont
+
+
+3.
+Mesagerie între utilizatori
+O mini funcționalitate de chat:
+Trimiți întrebări direct din anunț
+Inbox cu mesajele tale
+Notificare e-mail la mesaj nou
+
+
+4.
+Harta cu locații (cu pin-uri)
+Folosește Leaflet.js sau Google Maps:
+🗺️ Anunțuri afișate pe hartă
+🔍 Poți căuta direct pe hartă
+
+
+5.Recenzii și ratinguri
+După finalizarea unei închirieri:
+⭐️ Rating între 1–5
+✍️ Comentariu
+Listare medie pe anunț
