@@ -16,34 +16,52 @@
     {
         foreach (var ad in Model)
         {
-            <a href="@Url.Action("View", "Ad", new { id = ad.Id })" class="ad-row-link">
-                <div class="ad-row">
-                    <div class="ad-thumbnail">
-                        <img src="~/uploads/@(ad.MainImage ?? "default.jpg")" alt="Poză anunț" />
-                    </div>
-                    <div class="ad-content">
-                        <h3 class="ad-title">@ad.Title</h3>
-                        <span class="ad-category-badge">@ad.Category</span><br />
-                        <div class="ad-meta">
-                            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
-                            <span>@ad.Location</span>
+            <div class="ad-row-wrapper">
+                <a href="@Url.Action("View", "Ad", new { id = ad.Id })" class="ad-row-link">
+                    <div class="ad-row">
+                        <div class="ad-thumbnail">
+                            <img src="~/uploads/@(ad.MainImage ?? "default.jpg")" alt="Poză anunț" />
                         </div>
-                        <div class="ad-meta">
-                            <i class="bi bi-calendar-event-fill text-primary me-1"></i>
-                            <span>@ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                        <div class="ad-content">
+                            <h3 class="ad-title">@ad.Title</h3>
+                            <span class="ad-category-badge">@ad.Category</span><br />
+                            <div class="ad-meta">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                <span>@ad.Location</span>
+                            </div>
+                            <div class="ad-meta">
+                                <i class="bi bi-calendar-event-fill text-primary me-1"></i>
+                                <span>@ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                            </div>
                         </div>
+                        <div class="ad-price">
+                            @ad.Price.ToString("0.##") Lei
+                        </div>
+                        <form method="post"
+                              asp-controller="Favorite"
+                              asp-action="RemoveFromFavorites"
+                              class="favorite-form">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="adId" value="@ad.Id" />
+                            <button type="submit"
+                                    class="favorite-btn remove remove-favorite-btn"
+                                    data-ad-id="@ad.Id"
+                                    data-url="@Url.Action("RemoveFromFavorites", "Favorite")">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </button>
+
+                        </form>
                     </div>
-                    <div class="ad-price">
-                        @ad.Price.ToString("0.##") Lei
-                    </div>
-                </div>
-            </a>
+                </a>
+            </div>
         }
     }
 </div>
 
 @section Styles {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="~/css/Favorite/MyFavorites.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/Favorite/MyFavorites.css" asp-append-version="true" />
+    <script src="~/js/favorite/myfavorites.js"></script>
 }
+
 

@@ -21,5 +21,9 @@ namespace Anzoo.Service.Favorite
         {
             return await _favoriteRepository.GetUserFavoritesAsync(userId);
         }
+        public async Task RemoveFromFavoritesAsync(string userId, int adId)
+        {
+            await _favoriteRepository.RemoveFromFavoritesAsync(userId, adId);
+        }
     }
 }

@@ -43,5 +43,22 @@ namespace Anzoo.Controllers
 
             return View(favorites);
         }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFromFavorites(int adId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _service.RemoveFromFavoritesAsync(userId, adId);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Ok(new { success = true });
+            }
+
+            return RedirectToAction("MyFavorites");
+        }
+
     }
 }

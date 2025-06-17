@@ -8,5 +8,6 @@ namespace Anzoo.Repository.Favorite
     {
         Task AddToFavoritesAsync(string userId, int adId);
         Task<List<AdListViewModel>> GetUserFavoritesAsync(string userId);
+        Task RemoveFromFavoritesAsync(string userId, int adId);
     }
 }

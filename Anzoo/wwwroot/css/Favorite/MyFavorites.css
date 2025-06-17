@@ -82,6 +82,35 @@
     padding: 0 16px;
 }
 
+.ad-row-wrapper {
+    position: relative;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+
+.favorite-form {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 2;
+}
+
+.favorite-btn.remove {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s ease;
+}
+
+    .favorite-btn.remove:hover {
+        transform: scale(1.2);
+        color: #a71d2a;
+    }
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .ad-row {
@@ -90,10 +119,18 @@
         gap: 12px;
     }
 
-    .ad-thumbnail img {
+    .ad-thumbnail {
         width: 100%;
-        height: auto;
+        aspect-ratio: 3 / 2;
+        overflow: hidden;
+        border-radius: 8px;
     }
+
+        .ad-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
     .ad-content {
         width: 100%;

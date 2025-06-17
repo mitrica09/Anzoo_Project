@@ -56,6 +56,16 @@ namespace Anzoo.Repository.Favorite
                 MainImage = f.Ad.Images.FirstOrDefault(i => i.IsMain)?.FileName
             }).ToList();
         }
+        public async Task RemoveFromFavoritesAsync(string userId, int adId)
+        {
+            var favorite = await _db.Favorites
+                .FirstOrDefaultAsync(f => f.UserId == userId && f.AdId == adId);
 
+            if (favorite != null)
+            {
+                _db.Favorites.Remove(favorite);
+                await _db.SaveChangesAsync();
+            }
+        }
     }
 }
