@@ -1,14 +1,33 @@
 ﻿@model List<Anzoo.ViewModels.Ad.AdListViewModel>
 @using Anzoo.ViewModels.Ad
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Toate anunțurile";
     var filter = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
-}
+    var selectedCategory = Context.Request.Query["CategoryId"];
 
+    var icons = new Dictionary<string, string>
+    {
+        { "Auto, moto și ambarcațiuni", "car.svg" },
+        { "Imobiliare", "house.svg" },
+        { "Locuri de muncă", "briefcase.svg" },
+        { "Electronice și electrocasnice", "laptop.svg" },
+        { "Modă și frumusețe", "hanger.svg" },
+        { "Piese auto", "car-part.svg" },
+        { "Casă și grădină", "picnic-table.svg" },
+        { "Mama și copilul", "baby.svg" },
+        { "Sport, timp liber, artă", "ball.svg" },
+        { "Animale de companie", "paw.svg" },
+        { "Agro și industrie", "tractor.svg" },
+        { "Servicii", "paint.svg" },
+        { "Echipamente profesionale", "printer.svg" }
+    };
+}
 <!-- FORMULAR DE FILTRARE -->
 <div class="search-container">
     <form method="get" class="search-bar">
+        <input type="hidden" name="CategoryId" value="@filter.GetValueOrDefault("CategoryId")" />
         <div>
             <i class="bi bi-search"></i>
             <input type="text" name="Keyword" placeholder="Ce anume cauți?" value="@filter.GetValueOrDefault("Keyword")" />
@@ -23,7 +42,20 @@
     </form>
 </div>
 
+<!-- CATEGORII -->
+<div class="category-bar mb-4">
+    @foreach (var category in (List<SelectListItem>)ViewBag.Categories)
+    {
+        var iconFile = icons.ContainsKey(category.Text) ? icons[category.Text] : "default.svg";
+        var isActive = selectedCategory == category.Value ? "active" : "";
 
+        <a href="@Url.Action("AllAds", "Ad", new { CategoryId = category.Value })"
+           class="category-pill @isActive">
+            <img src="~/Icons/@iconFile" alt="" class="category-icon" />
+            <span>@category.Text</span>
+        </a>
+    }
+</div>
 
 <!-- LISTA DE ANUNȚURI -->
 <div class="ad-list">
