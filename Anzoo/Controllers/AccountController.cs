@@ -161,5 +161,37 @@ namespace Anzoo.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+
+        /* ------------------- CHANGE PASSWORD FROM PROFILE ------------------- */
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePasswordFromProfile(ChangePasswordFromProfileViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["ChangePasswordError"] = string.Join(" ", ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage));
+                return RedirectToAction("Profile");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _userManager.ChangePasswordAsync(user, vm.CurrentPassword, vm.NewPassword);
+
+            if (result.Succeeded)
+            {
+                TempData["ChangePasswordSuccess"] = "Parola a fost actualizată.";
+            }
+            else
+            {
+                TempData["ChangePasswordError"] = string.Join(" ", result.Errors.Select(e => e.Description));
+            }
+
+            return RedirectToAction("Profile");
+        }
+
+
+
     }
 }

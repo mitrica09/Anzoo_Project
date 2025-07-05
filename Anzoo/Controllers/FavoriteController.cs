@@ -59,6 +59,5 @@ namespace Anzoo.Controllers
 
             return RedirectToAction("MyFavorites");
         }
-
     }
 }

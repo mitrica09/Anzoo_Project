@@ -40,12 +40,18 @@
                 <span class="price-value">@Model.Price.ToString("0") Lei</span>
             </div>
 
-            <form asp-controller="Favorite" asp-action="AddToFavorites" method="post">
+            <form asp-controller="Favorite"
+                  asp-action="@(Model.IsFavorite ? "RemoveFromFavorites" : "AddToFavorites")"
+                  method="post"
+                  class="favorite-form">
+                @Html.AntiForgeryToken()
                 <input type="hidden" name="adId" value="@Model.Id" />
-                <button type="submit" class="btn btn-outline-danger w-100">
-                    <i class="bi bi-heart me-1"></i> Salvează în favorite
+                <button type="submit" class="btn btn-outline-danger w-100 favorite-btn">
+                    <i class="bi @(Model.IsFavorite ? "bi-heart-fill" : "bi-heart") me-1"></i>
+                    @(Model.IsFavorite ? "Șterge din favorite" : "Salvează în favorite")
                 </button>
             </form>
+
 
             <div>
                 <span class="category-badge">
@@ -106,4 +112,5 @@
 @section Styles {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/Ad/AdDetail.css" asp-append-version="true" />
+    <script src="~/js/favorite/detail.js"></script>
 }

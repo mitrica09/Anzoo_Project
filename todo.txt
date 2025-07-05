@@ -32,3 +32,9 @@ După finalizarea unei închirieri:
 ⭐️ Rating între 1–5
 ✍️ Comentariu
 Listare medie pe anunț
+
+
+6.Breadcrumbs / navigare în site
+Exemplu:
+Acasă > Imobiliare > Apartamente > Casa Bold de vânzare
+Ajută la SEO și orientare.

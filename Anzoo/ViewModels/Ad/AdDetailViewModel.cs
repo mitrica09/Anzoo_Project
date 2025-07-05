@@ -15,6 +15,8 @@ namespace Anzoo.ViewModels.Ad
         public DateTime CreatedAt { get; set; }
         public List<string> ImageFileNames { get; set; }
         public decimal Price { get; set; }
+        public bool IsFavorite { get; set; }
+
 
     }
 

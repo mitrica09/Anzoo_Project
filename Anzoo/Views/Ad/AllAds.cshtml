@@ -1,4 +1,4 @@
-﻿@model List<Anzoo.ViewModels.Ad.AdListViewModel>
+﻿@model Anzoo.ViewModels.Ad.AdListWithPaginationViewModel
 @using Anzoo.ViewModels.Ad
 @using Microsoft.AspNetCore.Mvc.Rendering
 
@@ -59,7 +59,7 @@
 
 <!-- LISTA DE ANUNȚURI -->
 <div class="ad-list">
-    @foreach (var ad in Model)
+    @foreach (var ad in Model.Ads)
     {
         <div class="ad-row-wrapper">
             <a href="@Url.Action("View", "Ad", new { id = ad.Id })" class="ad-row-link">
@@ -92,16 +92,28 @@
                             <i class="bi @(ad.IsFavorite ? "bi-heart-fill" : "bi-heart") favorite-icon"></i>
                         </button>
                     </form>
-
-
                 </div>
             </a>
         </div>
     }
 </div>
 
+<!-- PAGINARE -->
+<div class="pagination-container">
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        var query = new RouteValueDictionary(ViewBag.Filter);
+        query["Page"] = i;
+
+        <a class="pagination-link @(i == Model.Page ? "active" : "")"
+           href="@Url.Action("AllAds", "Ad", query)">
+            @i
+        </a>
+    }
+</div>
 
 @section Styles {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/Ad/AllAds.css" asp-append-version="true" />
+    <script src="~/js/favorite/add.js"></script>
 }

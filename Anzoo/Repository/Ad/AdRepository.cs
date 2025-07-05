@@ -79,30 +79,34 @@ namespace Anzoo.Repository.Ad
             }
         }
 
-        public async Task<AdDetailViewModel?> GetAdById(int id)
+public async Task<AdDetailViewModel?> GetAdById(int id)
+{
+    var userId = _http.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    
+    return await _db.Ads
+        .Include(a => a.Images)
+        .Include(a => a.Category)
+        .Where(a => a.Id == id)
+        .Select(a => new AdDetailViewModel
         {
-            return await _db.Ads
-                .Include(a => a.Images)
-                .Include(a => a.Category)
-                .Where(a => a.Id == id)
-                .Select(a => new AdDetailViewModel
-                {
-                    Id = a.Id,
-                    Title = a.Title,
-                    Description = a.Description,
-                    Location = a.Location,
-                    Category = a.Category.Name,
-                    CreatedAt = a.CreatedAt,
-                    Price = a.Price,
-                    ContactEmail = a.ContactEmail,
-                    ContactPhone = a.ContactPhone,
-                    ImageFileNames = a.Images
-                        .OrderBy(i => i.OrderIndex)
-                        .Select(i => i.FileName)
-                        .ToList()
-                })
-                .FirstOrDefaultAsync();
-        }
+            Id = a.Id,
+            Title = a.Title,
+            Description = a.Description,
+            Location = a.Location,
+            Category = a.Category.Name,
+            CreatedAt = a.CreatedAt,
+            Price = a.Price,
+            ContactEmail = a.ContactEmail,
+            ContactPhone = a.ContactPhone,
+            ImageFileNames = a.Images
+                .OrderBy(i => i.OrderIndex)
+                .Select(i => i.FileName)
+                .ToList(),
+            IsFavorite = userId != null && _db.Favorites.Any(f => f.UserId == userId && f.AdId == id)
+        })
+        .FirstOrDefaultAsync();
+}
+
 
 
         public async Task<List<AdListViewModel>> GetAllAds()
@@ -283,7 +287,7 @@ namespace Anzoo.Repository.Ad
             return true;
         }
 
-        public async Task<List<AdListViewModel>> GetAllAdsFilteredAsync(AdFilterViewModel filter)
+        public async Task<AdListWithPaginationViewModel> GetAllAdsFilteredAsync(AdFilterViewModel filter)
         {
             var userId = _http.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -292,7 +296,6 @@ namespace Anzoo.Repository.Ad
                 .Include(a => a.Category)
                 .AsQueryable();
 
-            // 🔍 Filtrare după titlu (cuvânt cheie în titlu sau descriere)
             if (!string.IsNullOrWhiteSpace(filter.Keyword))
             {
                 var keyword = filter.Keyword.Trim().ToLower();
@@ -301,32 +304,21 @@ namespace Anzoo.Repository.Ad
                     (a.Description != null && a.Description.ToLower().Contains(keyword)));
             }
 
-            // 🧭 Filtrare după categorie
             if (filter.CategoryId.HasValue && filter.CategoryId.Value > 0)
-            {
                 query = query.Where(a => a.CategoryId == filter.CategoryId.Value);
-            }
 
-            // 📍 Locație
             if (!string.IsNullOrWhiteSpace(filter.Location))
             {
                 var location = filter.Location.Trim().ToLower();
                 query = query.Where(a => a.Location.ToLower().Contains(location));
             }
 
-            // 💰 Preț minim
             if (filter.MinPrice.HasValue)
-            {
                 query = query.Where(a => a.Price >= filter.MinPrice.Value);
-            }
 
-            // 💰 Preț maxim
             if (filter.MaxPrice.HasValue)
-            {
                 query = query.Where(a => a.Price <= filter.MaxPrice.Value);
-            }
 
-            // 🔀 Sortare
             query = filter.SortBy switch
             {
                 "price_asc" => query.OrderBy(a => a.Price),
@@ -335,11 +327,14 @@ namespace Anzoo.Repository.Ad
                 _ => query.OrderByDescending(a => a.CreatedAt)
             };
 
-            var ads = await query.ToListAsync();
+            var totalCount = await query.CountAsync();
 
-            // ✅ Optimizare: preluăm toate id-urile favorite pentru userul logat
+            var ads = await query
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
+
             var favoriteAdIds = new HashSet<int>();
-
             if (!string.IsNullOrEmpty(userId))
             {
                 favoriteAdIds = _db.Favorites
@@ -348,18 +343,25 @@ namespace Anzoo.Repository.Ad
                     .ToHashSet();
             }
 
-            return ads.Select(a => new AdListViewModel
+            return new AdListWithPaginationViewModel
             {
-                Id = a.Id,
-                Title = a.Title,
-                Category = a.Category.Name,
-                Location = a.Location,
-                CreatedAt = a.CreatedAt,
-                Price = a.Price,
-                MainImage = a.Images.FirstOrDefault(i => i.IsMain)?.FileName,
-                IsFavorite = favoriteAdIds.Contains(a.Id)
-            }).ToList();
+                Page = filter.Page,
+                PageSize = filter.PageSize,
+                TotalCount = totalCount,
+                Ads = ads.Select(a => new AdListViewModel
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Category = a.Category.Name,
+                    Location = a.Location,
+                    CreatedAt = a.CreatedAt,
+                    Price = a.Price,
+                    MainImage = a.Images.FirstOrDefault(i => i.IsMain)?.FileName,
+                    IsFavorite = favoriteAdIds.Contains(a.Id)
+                }).ToList()
+            };
         }
+
 
     }
 }

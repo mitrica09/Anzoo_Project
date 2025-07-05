@@ -3,72 +3,74 @@
     ViewData["Title"] = "Creare Anunț";
 }
 
-<h1>Crează Anunț Nou</h1>
+<div class="create-ad-container">
+    <h1 class="form-title">Crează Anunț Nou</h1>
 
-<form asp-controller="Ad" asp-action="Create" method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
+    <form asp-controller="Ad" asp-action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
 
-    <!-- TITLU -->
-    <div class="form-group">
-        <label asp-for="Title">Titlu</label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-
-    <!-- DESCRIERE -->
-    <div class="form-group">
-        <label asp-for="Description">Descriere</label>
-        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <!-- LOCAŢIE -->
-    <div class="form-group">
-        <label asp-for="Location">Locație (oraș / județ)</label>
-        <input asp-for="Location" class="form-control" />
-        <span asp-validation-for="Location" class="text-danger"></span>
-    </div>
-
-    <!-- CATEGORIE -->
-    <div class="form-group">
-        <label asp-for="CategoryId">Categorie</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories">
-            <option value="">-- Selectează o categorie --</option>
-        </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
-
-    <!-- PREŢ -->
-    <div class="form-group">
-        <label asp-for="Price">Preț (RON)</label>
-        <input asp-for="Price" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-
-    <!-- 🆕 TELEFON (opţional) -->
-    <div class="form-group">
-        <label asp-for="ContactPhone">Telefon (opțional)</label>
-        <input asp-for="ContactPhone" class="form-control" placeholder="07xxxxxxxx" />
-        <span asp-validation-for="ContactPhone" class="text-danger"></span>
-    </div>
-
-    <!-- IMAGINI -->
-    <div class="form-group">
-        <label>Fotografii</label>
-        <p class="text-muted">Puteți încărca maxim 8 imagini.</p>
-
-        <div id="image-container" class="image-container">
-            <label id="uploadLabel" for="imageInput" class="upload-label">
-                <div class="upload-icon">+</div>
-                <div class="upload-text">Adaugă imagini<br><small>(max 8)</small></div>
-            </label>
+        <!-- TITLU -->
+        <div class="form-group">
+            <label asp-for="Title">Titlu</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
 
-        <input asp-for="Images" id="imageInput" type="file" multiple accept="image/*" hidden />
-    </div>
+        <!-- DESCRIERE -->
+        <div class="form-group">
+            <label asp-for="Description">Descriere</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Publică Anunțul</button>
-</form>
+        <!-- LOCAŢIE -->
+        <div class="form-group">
+            <label asp-for="Location">Locație (oraș / județ)</label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+
+        <!-- CATEGORIE -->
+        <div class="form-group">
+            <label asp-for="CategoryId">Categorie</label>
+            <select asp-for="CategoryId" class="form-control" asp-items="Model.Categories">
+                <option value="">-- Selectează o categorie --</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <!-- PREŢ -->
+        <div class="form-group">
+            <label asp-for="Price">Preț (RON)</label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <!-- TELEFON -->
+        <div class="form-group">
+            <label asp-for="ContactPhone">Telefon (opțional)</label>
+            <input asp-for="ContactPhone" class="form-control" placeholder="07xxxxxxxx" />
+            <span asp-validation-for="ContactPhone" class="text-danger"></span>
+        </div>
+
+        <!-- IMAGINI -->
+        <div class="form-group">
+            <label>Fotografii</label>
+            <p class="text-muted">Puteți încărca maxim 8 imagini.</p>
+
+            <div id="image-container" class="image-container">
+                <label id="uploadLabel" for="imageInput" class="upload-label">
+                    <div class="upload-icon">+</div>
+                    <div class="upload-text">Adaugă imagini<br><small>(max 8)</small></div>
+                </label>
+            </div>
+
+            <input asp-for="Images" id="imageInput" type="file" multiple accept="image/*" hidden />
+        </div>
+
+        <button type="submit" class="btn btn-primary publish-btn">Publică Anunțul</button>
+    </form>
+</div>
 
 @section Styles {
     <link rel="stylesheet" href="~/css/Ad/Create.css" asp-append-version="true" />

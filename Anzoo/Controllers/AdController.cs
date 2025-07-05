@@ -131,9 +131,10 @@ namespace Anzoo.Controllers
         [HttpGet]
         public async Task<IActionResult> AllAds([FromQuery] AdFilterViewModel filter)
         {
+            var result = await _service.GetAllAdsFilteredAsync(filter);
             ViewBag.Categories = await _service.GetCategoriesForDropdownMenu();
-            var ads = await _service.GetAllAdsFilteredAsync(filter);
-            return View(ads);
+            ViewBag.Filter = filter;
+            return View(result);
         }
 
     }

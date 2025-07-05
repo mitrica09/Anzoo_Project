@@ -216,6 +216,45 @@
     transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
 }
 
+
+
+
+
+
+
+
+
+
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin: 32px auto;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pagination-link {
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #f1f1f1;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #003b3b;
+    transition: background-color 0.2s ease;
+}
+
+    .pagination-link:hover {
+        background-color: #e2e6ea;
+    }
+
+    .pagination-link.active {
+        background-color: #003b3b;
+        color: white;
+    }
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .ad-row {

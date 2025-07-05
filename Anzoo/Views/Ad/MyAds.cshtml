@@ -17,8 +17,14 @@
             <div class="ad-content">
                 <h3 class="ad-title">@ad.Title</h3>
                 <span class="ad-category-badge">@ad.Category</span><br />
-                <span class="ad-location">Locație: @ad.Location</span><br />
-                <span class="ad-location">Publicat: @ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                <div class="ad-meta">
+                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                    <span>@ad.Location</span>
+                </div>
+                <div class="ad-meta">
+                    <i class="bi bi-calendar-event-fill text-primary me-1"></i>
+                    <span>@ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
+                </div>
             </div>
 
             <div class="ad-price-actions">

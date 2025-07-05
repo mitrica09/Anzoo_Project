@@ -1,4 +1,73 @@
-﻿.image-container {
+﻿.create-ad-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.form-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    text-align: center;
+    color: #003b3b;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: inline-block;
+    color: #333;
+}
+
+input.form-control,
+textarea.form-control,
+select.form-control {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+    input.form-control:focus,
+    textarea.form-control:focus,
+    select.form-control:focus {
+        border-color: #1c7c6e;
+        outline: none;
+        box-shadow: 0 0 4px rgba(28, 124, 110, 0.2);
+    }
+
+.publish-btn {
+    background-color: #003b3b;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    display: block;
+    width: 100%;
+    transition: background 0.2s ease-in-out;
+    margin-top: 16px;
+}
+
+    .publish-btn:hover {
+        background-color: #005050;
+    }
+
+.text-danger {
+    font-size: 13px;
+}
+
+/* ================== IMAGINI ================== */
+.image-container {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
@@ -75,7 +144,7 @@
         background: rgba(0, 0, 0, 0.8);
     }
 
-/* Badge pentru imaginea principală */
+/* Badge PRINCIPALĂ */
 .main-badge {
     position: absolute;
     top: 6px;
@@ -88,24 +157,31 @@
     border-radius: 4px;
     text-transform: uppercase;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-    display: none; /* ascuns implicit */
+    display: none;
 }
 
-/* Afișează badge-ul DOAR pentru prima imagine */
 .image-item.main .main-badge {
     display: block;
 }
 
-
-/* Ghost effect while dragging */
+/* Drag effect */
 .sortable-ghost {
     opacity: 0.3;
     transform: scale(0.95);
     transition: transform 0.1s ease;
 }
 
-/* Responsive grid feel */
+/* Responsive */
 @media (max-width: 768px) {
+    .create-ad-container {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .form-title {
+        font-size: 22px;
+    }
+
     .image-item,
     .upload-label {
         width: 100px;

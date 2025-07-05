@@ -54,10 +54,11 @@ namespace Anzoo.Service.Ad
         {
             return _adRepository.GetAdForEditAsync(id, userId);
         }
-        public async Task<List<AdListViewModel>> GetAllAdsFilteredAsync(AdFilterViewModel filter)
+        public async Task<AdListWithPaginationViewModel> GetAllAdsFilteredAsync(AdFilterViewModel filter)
         {
             return await _adRepository.GetAllAdsFilteredAsync(filter);
         }
+
 
     }
 }
