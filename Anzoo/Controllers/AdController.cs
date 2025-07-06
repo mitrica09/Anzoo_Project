@@ -25,6 +25,13 @@ namespace Anzoo.Controllers
                 Categories = (await _service.GetCategoriesForDropdownMenu()).ToList()
             };
 
+            ViewBag.Breadcrumbs = new List<(string Text, string Url)>
+            {
+                ("Acasă", Url.Action("Index", "Home")),
+                ("Toate anunțurile", Url.Action("AllAds", "Ad")),
+                ("Creează anunț", null)
+            };
+
             return View(viewModel);
         }
 
@@ -53,12 +60,20 @@ namespace Anzoo.Controllers
             return RedirectToAction("MyAds");
         }
 
+        [AllowAnonymous]
         [HttpGet("/Ad/View/{id}")]
         public async Task<IActionResult> View(int id)
         {
             var ad = await _service.GetAdById(id);
             if (ad == null)
                 return NotFound();
+
+            ViewBag.Breadcrumbs = new List<(string Text, string Url)>
+            {
+                ("Acasă", Url.Action("Index", "Home")),
+                ("Toate anunțurile", Url.Action("AllAds", "Ad")),
+                ("Detaliile anunțului", null)
+            };
 
             return View("AdDetail", ad);
         }
@@ -67,6 +82,14 @@ namespace Anzoo.Controllers
         public async Task<IActionResult> MyAds()
         {
             var ads = await _service.GetMyAds();
+
+            ViewBag.Breadcrumbs = new List<(string Text, string Url)>
+            {
+                ("Acasă", Url.Action("Index", "Home")),
+                ("Toate anunțurile", Url.Action("AllAds", "Ad")),
+                ("Anunțurile mele", null)
+            };
+
             return View("MyAds", ads);
         }
 
@@ -80,7 +103,13 @@ namespace Anzoo.Controllers
                 return NotFound();
 
             ViewBag.Categories = await _service.GetCategoriesForDropdownMenu(); // ✅ Așteaptă corect
-
+            ViewBag.Breadcrumbs = new List<(string Text, string Url)>
+            {
+                ("Acasă", Url.Action("Index", "Home")),
+                ("Toate anunțurile", Url.Action("AllAds", "Ad")),
+                ("Anunțurile mele", Url.Action("MyAds", "Ad")),
+                ("Editează anunț", null)
+            };
             return View(form);
         }
 
@@ -134,6 +163,13 @@ namespace Anzoo.Controllers
             var result = await _service.GetAllAdsFilteredAsync(filter);
             ViewBag.Categories = await _service.GetCategoriesForDropdownMenu();
             ViewBag.Filter = filter;
+
+            ViewBag.Breadcrumbs = new List<(string Text, string Url)>
+            {
+                ("Acasă", Url.Action("Index", "Home")),
+                ("Toate anunțurile", null)
+            };
+
             return View(result);
         }
 

@@ -3,6 +3,13 @@
         form.addEventListener("submit", async e => {
             e.preventDefault();
 
+            // ⛔ Dacă utilizatorul nu e logat, redirecționează către Login
+            if (typeof window.isAuthenticated !== "undefined" && !window.isAuthenticated) {
+                window.location.href = window.loginUrl || "/Account/Login";
+                return;
+            }
+
+
             const button = form.querySelector(".favorite-btn");
             const heartIcon = button?.querySelector("i");
             const navbarHeart = document.querySelector(".navbar-heart-icon");

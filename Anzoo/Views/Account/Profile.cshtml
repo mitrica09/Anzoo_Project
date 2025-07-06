@@ -17,7 +17,6 @@
         <div class="alert alert-success">@ViewBag.Message</div>
     }
 
-    <!-- DATE PERSONALE -->
     <div class="profile-section">
         <h2 class="section-title">Date personale</h2>
         <form asp-action="Profile" method="post">
@@ -47,55 +46,16 @@
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
 
-            <div class="form-buttons">
+            <div class="form-profile-buttons">
                 <button type="submit" class="btn-profile">Salvează</button>
             </div>
         </form>
     </div>
-
-    <!-- SCHIMBARE PAROLĂ -->
-    <div class="profile-section">
-        <h2 class="section-title">Schimbă parola</h2>
-
-        @if (TempData["ChangePasswordError"] != null)
-        {
-            <div class="alert alert-danger">@TempData["ChangePasswordError"]</div>
-        }
-        else if (TempData["ChangePasswordSuccess"] != null)
-        {
-            <div class="alert alert-success">@TempData["ChangePasswordSuccess"]</div>
-        }
-
-        <form asp-action="ChangePasswordFromProfile" method="post">
-            <div class="form-group">
-                <label asp-for="PasswordForm.CurrentPassword"></label>
-                <input asp-for="PasswordForm.CurrentPassword" class="form-control" type="password" />
-                <span asp-validation-for="PasswordForm.CurrentPassword" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PasswordForm.NewPassword"></label>
-                <input asp-for="PasswordForm.NewPassword" class="form-control" type="password" />
-                <span asp-validation-for="PasswordForm.NewPassword" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PasswordForm.ConfirmNewPassword"></label>
-                <input asp-for="PasswordForm.ConfirmNewPassword" class="form-control" type="password" />
-                <span asp-validation-for="PasswordForm.ConfirmNewPassword" class="text-danger"></span>
-            </div>
-
-            <div class="form-buttons">
-                <button type="submit" class="btn-profile">Actualizează parola</button>
-            </div>
-        </form>
-    </div>
-
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/Account/Profile.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/Account/Profile.css" asp-append-version="true" />
 }
 
 @section Scripts {

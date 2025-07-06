@@ -16,6 +16,32 @@ body {
     font-size: 1.7rem;
 }
 
+
+/* Breadcrumb */
+.breadcrumb-wrapper {
+    max-width: 1040px;
+    margin: 1.5rem auto 1rem auto;
+    padding: 0 16px;
+}
+
+
+.breadcrumb {
+    background-color: transparent;
+    font-size: 14px;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+    .breadcrumb a {
+        text-decoration: none;
+        color: #00bfa6;
+    }
+
+.breadcrumb-item.active {
+    color: #003d3c;
+}
+
+
 /* Logo spacing (OLX-style) */
 .logo-spacing {
     margin-left: 1.5rem;

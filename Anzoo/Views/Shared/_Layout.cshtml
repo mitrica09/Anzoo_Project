@@ -16,33 +16,20 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-teal shadow-sm px-4">
             <div class="container-fluid d-flex justify-content-between align-items-center">
-                <!-- Logo (cu distanță mai mare față de marginea stângă) -->
-                <a class="navbar-brand logo-spacing"
-                   asp-controller="Home" asp-action="Index">
-                    Anzoo
-                </a>
+                <a class="navbar-brand logo-spacing" asp-controller="Home" asp-action="Index">Anzoo</a>
 
-                <!-- Toggler pentru mobil -->
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavbar"
-                        aria-controls="mainNavbar"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar"
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <!-- Meniu navigație -->
                 <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                     <ul class="navbar-nav align-items-lg-center me-3">
-                        <!-- decalaj față de marginea dreaptă -->
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link ms-lg-3" asp-controller="Ad" asp-action="MyAds">
-                                    Anunțurile mele
-                                </a>
+                                <a class="nav-link ms-lg-3" asp-controller="Ad" asp-action="MyAds">Anunțurile mele</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Favorite" asp-action="MyFavorites" title="Favoritele mele">
@@ -50,33 +37,24 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Profile">
-                                    Profilul meu
-                                </a>
+                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Profile">Profilul meu</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Logout">
-                                    Logout
-                                </a>
+                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Login">
-                                    Login
-                                </a>
+                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Register">
-                                    Register
-                                </a>
+                                <a class="nav-link ms-lg-3" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
 
                         <li class="nav-item ms-lg-3">
-                            <a class="btn btn-add rounded-pill px-4 fw-semibold"
-                               asp-controller="Ad" asp-action="Create">
+                            <a class="btn btn-add rounded-pill px-4 fw-semibold" asp-controller="Ad" asp-action="Create">
                                 Adaugă anunţ nou
                             </a>
                         </li>
@@ -87,6 +65,31 @@
     </header>
 
     <div class="container mt-4">
+
+        @if (ViewBag.Breadcrumbs != null)
+        {
+            <div class="breadcrumb-wrapper">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb">
+                        @foreach (var crumb in (List<(string Text, string Url)>)ViewBag.Breadcrumbs)
+                        {
+                            if (crumb.Equals(((List<(string, string)>)ViewBag.Breadcrumbs).Last()))
+                            {
+                                <li class="breadcrumb-item active" aria-current="page">@crumb.Text</li>
+                            }
+                            else
+                            {
+                                <li class="breadcrumb-item">
+                                    <a href="@crumb.Url">@crumb.Text</a>
+                                </li>
+                            }
+                        }
+                    </ol>
+                </nav>
+            </div>
+        }
+
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

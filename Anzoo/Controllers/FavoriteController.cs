@@ -41,6 +41,13 @@ namespace Anzoo.Controllers
 
             var favorites = await _service.GetUserFavoritesAsync(userId);
 
+            ViewBag.Breadcrumbs = new List<(string Text, string Url)>
+            {
+                ("Acasă", Url.Action("Index", "Home")),
+                ("Toate anunțurile", Url.Action("AllAds", "Ad")),
+                ("Anunțuri favorite", null)
+            };
+
             return View(favorites);
         }
 

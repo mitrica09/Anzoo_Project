@@ -6,6 +6,5 @@
         public string Email { get; set; }  // readonly
         public string PhoneNumber { get; set; }
         public string Location { get; set; }
-        public ChangePasswordFromProfileViewModel PasswordForm { get; set; } = new();
     }
 }

@@ -71,6 +71,11 @@ namespace Anzoo.Data
                 .WithMany()
                 .HasForeignKey(f => f.AdId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Points)
+                .HasDefaultValue(0);
+
         }
 
 

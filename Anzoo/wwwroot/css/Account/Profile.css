@@ -70,7 +70,7 @@ body {
 }
 
     .profile-section:hover {
-        transform: translateY(-5px);
+        /* transform: translateY(-5px);  - in cazul in care vreau sa se miste putin form*/
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
     }
 
