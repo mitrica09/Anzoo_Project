@@ -1,4 +1,90 @@
-﻿@page
-@model Anzoo.Views.Ad.PromoteAdModel
+﻿@model Anzoo.ViewModels.Ad.AdDetailViewModel
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger text-center">@TempData["Error"]</div>
+}
+@if (TempData["Msg"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["Msg"]</div>
+}
+
+<div class="promotion-header">
+    <h2 class="promotion-header-title">Alege promovarea potrivită și atrage mai mulți cumpărători!</h2>
+    <p class="promotion-header-subtitle">Cu ajutorul pachetelor noastre de promovare, anunțul tău va ieși în evidență, va primi mai multe vizualizări și îți va aduce rezultate mai rapide.</p>
+</div>
+
+<div class="promotion-cards-wrapper">
+
+    <form method="post" asp-action="PromoteConfirmed" asp-controller="Ad">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+        <input type="hidden" name="days" value="3" />
+        <button type="submit" class="promotion-card" data-fill="25">
+            <h3 class="promotion-title">Premium<br /><span class="promotion-duration">3 zile</span></h3>
+            <ul class="promotion-features">
+                <li>✅ Promovare pe homepage</li>
+                <li>✅ Evidențiere vizuală</li>
+                <li>✅ Ideal pentru test rapid</li>
+                <li>⚡ 3 puncte</li>
+            </ul>
+            <div class="promotion-bar">
+                <div class="promotion-filledbar"></div>
+            </div>
+        </button>
+    </form>
+
+    <form method="post" asp-action="PromoteConfirmed" asp-controller="Ad">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+        <input type="hidden" name="days" value="7" />
+        <button type="submit" class="promotion-card" data-fill="60">
+            <h3 class="promotion-title">Business<br /><span class="promotion-duration">7 zile</span></h3>
+            <ul class="promotion-features">
+                <li>✅ Promovare extinsă</li>
+                <li>✅ Prioritate în căutări</li>
+                <li>✅ Vizibilitate de durată</li>
+                <li>⚡ 7 puncte</li>
+            </ul>
+            <div class="promotion-bar">
+                <div class="promotion-filledbar"></div>
+            </div>
+        </button>
+    </form>
+
+    <form method="post" asp-action="PromoteConfirmed" asp-controller="Ad">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+        <input type="hidden" name="days" value="14" />
+        <button type="submit" class="promotion-card" data-fill="100">
+            <h3 class="promotion-title">Ultimate Boost<br /><span class="promotion-duration">14 zile</span></h3>
+            <ul class="promotion-features">
+                <li>✅ Vizibilitate maximă</li>
+                <li>✅ Promovare dublă durată</li>
+                <li>✅ Ideal pentru produse scumpe</li>
+                <li>⚡ 14 puncte</li>
+            </ul>
+            <div class="promotion-bar">
+                <div class="promotion-filledbar"></div>
+            </div>
+        </button>
+    </form>
+
+</div>
+
+<div class="promotion-skip-wrapper">
+    <a href="/Ad/MyAds" class="promotion-skip-btn">Nu doresc promovare</a>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/Ad/PromoteAd.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="~/js/Ad/PromoteAd.js" asp-append-version="true"></script>
 }

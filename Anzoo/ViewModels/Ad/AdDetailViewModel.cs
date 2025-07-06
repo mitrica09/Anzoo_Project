@@ -16,7 +16,9 @@ namespace Anzoo.ViewModels.Ad
         public List<string> ImageFileNames { get; set; }
         public decimal Price { get; set; }
         public bool IsFavorite { get; set; }
-
+        public bool IsPromoted { get; set; }
+        public DateTime? PromotionExpiresAt { get; set; }
+        public string UserId { get; set; }
 
     }
 

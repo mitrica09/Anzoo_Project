@@ -43,13 +43,12 @@ namespace Anzoo.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Reîncarcă dropdown-ul pentru validare
                 model.Categories = (await _service.GetCategoriesForDropdownMenu()).ToList();
                 return View(model);
             }
 
-            var success = await _service.Create(model);
-            if (!success)
+            var adId = await _service.Create(model);
+            if (adId == null)
             {
                 ModelState.AddModelError("", "A apărut o eroare la salvarea anunțului.");
                 model.Categories = (await _service.GetCategoriesForDropdownMenu()).ToList();
@@ -57,8 +56,9 @@ namespace Anzoo.Controllers
             }
 
             TempData["Msg"] = "Anunțul a fost publicat!";
-            return RedirectToAction("MyAds");
+            return RedirectToAction("PromoteAd", new { id = adId });
         }
+
 
         [AllowAnonymous]
         [HttpGet("/Ad/View/{id}")]
@@ -172,6 +172,45 @@ namespace Anzoo.Controllers
 
             return View(result);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> PromoteAd(int id)
+        {
+            var ad = await _service.GetAdById(id);
+
+            if (ad == null || ad.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return NotFound();
+            }
+
+            return View("PromoteAd", ad);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PromoteConfirmed(int id, int days)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // ✅ Verificăm dacă anunțul aparține userului
+            var ad = await _service.GetAdById(id);
+            if (ad == null || ad.UserId != userId)
+            {
+                return Unauthorized(); // sau NotFound() dacă vrei să nu dai niciun indiciu
+            }
+
+            var success = await _service.PromoteAd(id, userId, days);
+            if (!success)
+            {
+                TempData["Error"] = $"Nu ai suficiente puncte pentru {days} {(days == 1 ? "zi" : "zile")} de promovare.";
+                return RedirectToAction("PromoteAd", new { id });
+            }
+
+            TempData["Msg"] = $"Anunțul a fost promovat pentru {days} {(days == 1 ? "zi" : "zile")}!";
+            return RedirectToAction("View", new { id });
+        }
+
 
     }
 }

@@ -18,7 +18,7 @@ namespace Anzoo.Service.Ad
             _http = http;
         }
 
-        public async Task<bool> Create(CreateAdViewModel adForm)
+        public async Task<int?> Create(CreateAdViewModel adForm)
         {
             return await _adRepository.Create(adForm);
         }
@@ -59,6 +59,10 @@ namespace Anzoo.Service.Ad
             return await _adRepository.GetAllAdsFilteredAsync(filter);
         }
 
+        public async Task<bool> PromoteAd(int adId, string userId, int days)
+        {
+            return await _adRepository.PromoteAd(adId, userId, days);
+        }
 
     }
 }

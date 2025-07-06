@@ -20,7 +20,7 @@ namespace Anzoo.Repository.Ad
             _http = http;
         }
 
-        public async Task<bool> Create(CreateAdViewModel adForm)
+        public async Task<int?> Create(CreateAdViewModel adForm)
         {
             using var trx = await _db.Database.BeginTransactionAsync();
             try
@@ -30,7 +30,7 @@ namespace Anzoo.Repository.Ad
 
                 var category = await _db.Categories.FindAsync(adForm.CategoryId);
                 if (category == null || user == null)
-                    return false;
+                    return null;
 
                 var ad = new Models.Ad
                 {
@@ -70,42 +70,47 @@ namespace Anzoo.Repository.Ad
 
                 await _db.SaveChangesAsync();
                 await trx.CommitAsync();
-                return true;
+
+                return ad.Id; // ✅ returnăm ID-ul
             }
             catch
             {
                 await trx.RollbackAsync();
-                return false;
+                return null;
             }
         }
 
-public async Task<AdDetailViewModel?> GetAdById(int id)
-{
-    var userId = _http.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-    
-    return await _db.Ads
-        .Include(a => a.Images)
-        .Include(a => a.Category)
-        .Where(a => a.Id == id)
-        .Select(a => new AdDetailViewModel
+
+        public async Task<AdDetailViewModel?> GetAdById(int id)
         {
-            Id = a.Id,
-            Title = a.Title,
-            Description = a.Description,
-            Location = a.Location,
-            Category = a.Category.Name,
-            CreatedAt = a.CreatedAt,
-            Price = a.Price,
-            ContactEmail = a.ContactEmail,
-            ContactPhone = a.ContactPhone,
-            ImageFileNames = a.Images
-                .OrderBy(i => i.OrderIndex)
-                .Select(i => i.FileName)
-                .ToList(),
-            IsFavorite = userId != null && _db.Favorites.Any(f => f.UserId == userId && f.AdId == id)
-        })
-        .FirstOrDefaultAsync();
-}
+            var userId = _http.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    
+            return await _db.Ads
+                .Include(a => a.Images)
+                .Include(a => a.Category)
+                .Where(a => a.Id == id)
+                .Select(a => new AdDetailViewModel
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    Location = a.Location,
+                    Category = a.Category.Name,
+                    CreatedAt = a.CreatedAt,
+                    Price = a.Price,
+                    ContactEmail = a.ContactEmail,
+                    ContactPhone = a.ContactPhone,
+                    IsPromoted = a.IsPromoted, 
+                    PromotionExpiresAt = a.PromotionExpiresAt,
+                    UserId = a.UserId,
+                    ImageFileNames = a.Images
+                        .OrderBy(i => i.OrderIndex)
+                        .Select(i => i.FileName)
+                        .ToList(),
+                    IsFavorite = userId != null && _db.Favorites.Any(f => f.UserId == userId && f.AdId == id)
+                })
+                .FirstOrDefaultAsync();
+        }
 
 
 
@@ -291,6 +296,22 @@ public async Task<AdDetailViewModel?> GetAdById(int id)
         {
             var userId = _http.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // ✅ Dezactivează promovările expirate
+            var now = DateTime.Now;
+            var expiredAds = await _db.Ads
+                .Where(a => a.IsPromoted && a.PromotionExpiresAt < now)
+                .ToListAsync();
+
+            foreach (var ad in expiredAds)
+            {
+                ad.IsPromoted = false;
+                ad.PromotionExpiresAt = null;
+            }
+
+            if (expiredAds.Any())
+                await _db.SaveChangesAsync();
+
+            // 🔎 Aplică filtrarea normală
             var query = _db.Ads
                 .Include(a => a.Images)
                 .Include(a => a.Category)
@@ -321,10 +342,21 @@ public async Task<AdDetailViewModel?> GetAdById(int id)
 
             query = filter.SortBy switch
             {
-                "price_asc" => query.OrderBy(a => a.Price),
-                "price_desc" => query.OrderByDescending(a => a.Price),
-                "date_asc" => query.OrderBy(a => a.CreatedAt),
-                _ => query.OrderByDescending(a => a.CreatedAt)
+                "price_asc" => query
+                    .OrderByDescending(a => a.IsPromoted)
+                    .ThenBy(a => a.Price),
+
+                "price_desc" => query
+                    .OrderByDescending(a => a.IsPromoted)
+                    .ThenByDescending(a => a.Price),
+
+                "date_asc" => query
+                    .OrderByDescending(a => a.IsPromoted)
+                    .ThenBy(a => a.CreatedAt),
+
+                _ => query
+                    .OrderByDescending(a => a.IsPromoted)
+                    .ThenByDescending(a => a.CreatedAt)
             };
 
             var totalCount = await query.CountAsync();
@@ -357,11 +389,27 @@ public async Task<AdDetailViewModel?> GetAdById(int id)
                     CreatedAt = a.CreatedAt,
                     Price = a.Price,
                     MainImage = a.Images.FirstOrDefault(i => i.IsMain)?.FileName,
-                    IsFavorite = favoriteAdIds.Contains(a.Id)
+                    IsFavorite = favoriteAdIds.Contains(a.Id),
+                    IsPromoted = a.IsPromoted
                 }).ToList()
             };
         }
 
+        public async Task<bool> PromoteAd(int adId, string userId, int days)
+        {
+            var ad = await _db.Ads.FirstOrDefaultAsync(a => a.Id == adId && a.UserId == userId);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (ad == null || user == null || user.Points < days)
+                return false;
+
+            ad.IsPromoted = true;
+            ad.PromotionExpiresAt = DateTime.Now.AddDays(days);
+            user.Points -= days;
+
+            await _db.SaveChangesAsync();
+            return true;
+        }
 
     }
 }

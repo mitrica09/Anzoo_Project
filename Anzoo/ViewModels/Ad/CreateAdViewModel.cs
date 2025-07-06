@@ -7,6 +7,7 @@ namespace Anzoo.ViewModels.Ad
 {
     public class CreateAdViewModel
     {
+
         [Required, MinLength(10), MaxLength(70)]
         public string Title { get; set; }
 

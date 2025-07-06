@@ -70,9 +70,17 @@
         <div class="ad-row-wrapper">
             <a href="@Url.Action("View", "Ad", new { id = ad.Id })" class="ad-row-link">
                 <div class="ad-row">
+
+                    @* Badge PROMOVAT *@
+                    @if (ad.IsPromoted)
+                    {
+                        <div class="badge-promoted">Promovat</div>
+                    }
+
                     <div class="ad-thumbnail">
                         <img src="~/uploads/@(ad.MainImage ?? "default.jpg")" alt="Poză anunț" />
                     </div>
+
                     <div class="ad-content">
                         <h3 class="ad-title">@ad.Title</h3>
                         <span class="ad-category-badge">@ad.Category</span><br />
@@ -85,9 +93,11 @@
                             <span>@ad.CreatedAt.ToString("dd MMM yyyy HH:mm")</span>
                         </div>
                     </div>
+
                     <div class="ad-price">
                         @ad.Price.ToString("0.##") Lei
                     </div>
+
                     <form method="post"
                           asp-controller="Favorite"
                           asp-action="AddToFavorites"
@@ -103,6 +113,7 @@
         </div>
     }
 </div>
+
 
 <!-- PAGINARE -->
 <div class="pagination-container">

@@ -14,14 +14,16 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.2s ease;
+    position: relative; /* pentru badge */
 }
-    .ad-row-wrapper {
-        position: relative;
-    }
 
-    .ad-row:hover {
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
-    }
+.ad-row-wrapper {
+    position: relative;
+}
+
+.ad-row:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
 
 .ad-thumbnail img {
     width: 180px;
@@ -79,14 +81,12 @@
     white-space: nowrap;
 }
 
-/* Centrăm întreaga listă + filtre */
 .ad-list {
     max-width: 1040px;
     margin: 0 auto;
     padding: 0 16px;
 }
 
-/* Bara de căutare tip OLX */
 .search-container {
     display: flex;
     justify-content: center;
@@ -139,9 +139,11 @@
     gap: 6px;
     transition: background-color 0.2s;
 }
+
     .search-btn i {
         color: white;
     }
+
     .search-btn:hover {
         background-color: #005050;
     }
@@ -177,13 +179,10 @@
         opacity: 0.9;
     }
 
-
     .category-pill.active {
         background-color: #003b3b;
         color: white;
     }
-
-
 
 .favorite-form {
     position: absolute;
@@ -202,10 +201,10 @@
     transition: transform 0.2s ease;
 }
 
-.favorite-btn:hover {
-    transform: scale(1.2);
-    color: #a71d2a;
-}
+    .favorite-btn:hover {
+        transform: scale(1.2);
+        color: #a71d2a;
+    }
 
 .flying-heart {
     position: fixed;
@@ -216,15 +215,22 @@
     transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
 }
 
-
-
-
-
-
-
-
-
-
+/* BADGE PROMOVAT */
+.badge-promoted {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background-color: gold;
+    color: #222;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.15);
+    z-index: 3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
 .pagination-container {
     display: flex;
@@ -253,7 +259,6 @@
         background-color: #003b3b;
         color: white;
     }
-
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -321,5 +326,4 @@
         gap: 12px;
         align-items: stretch;
     }
-
 }

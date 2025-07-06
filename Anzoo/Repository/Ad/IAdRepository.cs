@@ -5,7 +5,7 @@ namespace Anzoo.Repository.Ad
 {
     public interface IAdRepository
     {
-        Task<bool> Create(CreateAdViewModel adForm);
+        Task<int?> Create(CreateAdViewModel adForm);
         Task<List<AdListViewModel>> GetAllAds();
         Task<AdDetailViewModel?> GetAdById(int id);
         Task<IEnumerable<SelectListItem>> GetCategoriesForDropdownMenu();
@@ -14,5 +14,6 @@ namespace Anzoo.Repository.Ad
         Task<bool> UpdateAsync(UpdateAdViewModel model, string userId);
         Task<bool> DeleteAsync(int id, string userId);
         Task<AdListWithPaginationViewModel> GetAllAdsFilteredAsync(AdFilterViewModel filter);
+        Task<bool> PromoteAd(int adId, string userId, int days);
     }
 }

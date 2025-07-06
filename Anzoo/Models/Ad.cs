@@ -36,5 +36,9 @@ namespace Anzoo.Models
         public User User { get; set; }
 
         public List<AdImage> Images { get; set; } = new();
+
+        public bool IsPromoted { get; set; } = false;
+        public DateTime? PromotionExpiresAt { get; set; }
+
     }
 }

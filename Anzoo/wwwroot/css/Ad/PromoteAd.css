@@ -1,0 +1,100 @@
+﻿.promotion-cards-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-top: 80px;
+    flex-wrap: wrap;
+}
+
+.promotion-card {
+    display: block;
+    width: 320px;
+    height: 480px; /* mai lung pe verticală */
+    background-color: #003F3F; /* Tema verde închis */
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    padding: 25px;
+    text-decoration: none;
+    color: white;
+    position: relative;
+    transition: transform 0.4s ease-out;
+}
+
+    .promotion-card:hover {
+        transform: translateY(-10px);
+    }
+
+.promotion-title {
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.promotion-duration {
+    color: white;
+    font-weight: bold;
+}
+
+.promotion-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px 0;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.promotion-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 25px;
+    width: calc(100% - 50px);
+    height: 6px;
+    background-color: #2e3033;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.promotion-filledbar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, rgba(0,154,217,1) 0%, rgba(217,147,0,1) 65%, rgba(255,186,0,1) 100%);
+    transition: width 0.7s ease;
+}
+
+.promotion-header-title {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 2rem;
+    color: black;
+    font-weight: 600;
+}
+
+.promotion-header-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    color: black; 
+    margin-bottom: 40px;
+}
+.promotion-skip-wrapper {
+    text-align: center;
+    margin: 40px 0 60px;
+}
+
+.promotion-skip-btn {
+    background-color: #003F3F;
+    color: white;
+    padding: 12px 24px;
+    border: 2px solid white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+    .promotion-skip-btn:hover {
+        background-color: white;
+        color: #003F3F;
+        border-color: #003F3F;
+    }
